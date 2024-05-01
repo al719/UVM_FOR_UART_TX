@@ -1,0 +1,29 @@
+vlib work
+vlog -f source.txt +cover -covercells
+vsim -voptargs=+accs work.top -sv_seed 2360443213 -cover 
+#-debugDB
+#-debugDB -fsmdebug --> vsim options
+add wave -position insertpoint sim:/top/dut_if/*
+add wave -position insertpoint sim:/top/DUT/U0_fsm/*
+add wave -position insertpoint sim:/top/DUT/U0_Serializer/*
+add wave -position insertpoint sim:/top/DUT/U0_mux/*
+add wave -position insertpoint sim:/top/DUT/U0_parity_calc/*
+
+add wave /top/DUT/DUTA/chk_busy
+add wave /top/DUT/DUTA/chk_data
+
+run 0
+
+add wave -position insertpoint  \
+sim:/uvm_root/uvm_test_top/env/scoreboard/collected_data
+
+add wave -position insertpoint  \
+sim:/uvm_root/uvm_test_top/env/scoreboard/counter
+
+add wave -position insertpoint  \
+sim:/uvm_root/uvm_test_top/env/scoreboard/correct_count \
+sim:/uvm_root/uvm_test_top/env/scoreboard/error_count
+
+run -all
+
+#quit -sim
